@@ -1,14 +1,15 @@
 [project]
 name = "pboot-wtf"
+version = "1.0.0"
 description = "Form rendering, validation, and CSRF protection for Pboot with WTForms."
 readme = "README.rst"
-license = {file = "LICENSE.rst"}
+license = "BSD-3-Clause"
+license-files = ["LICENSE.rst"]
 maintainers = [{name = "pboot-org"}]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
@@ -23,7 +24,6 @@ dependencies = [
     "WTForms>=3.0",
     "itsdangerous>=2.1.2",
 ]
-dynamic = ["version"]
 
 [project.urls]
 Documentation = "https://flask-wtf.readthedocs.io/"
@@ -56,18 +56,14 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core>=3.12,<4"]
+build-backend = "flit_core.buildapi"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/pboot_wtf"]
+[tool.flit.module]
+name = "pboot_wtf"
 
-[tool.hatch.version]
-path = "src/pboot_wtf/__init__.py"
-
-[tool.hatch.build]
+[tool.flit.sdist]
 include = [
-    "src/",
     "docs/",
     "tests/",
     "examples/",
