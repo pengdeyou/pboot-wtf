@@ -1,0 +1,40 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+      - '*.x'
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
+jobs:
+  tests:
+    name: ${{ matrix.name || matrix.python }}
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {python: '3.14'}
+          - {python: '3.13'}
+          - {python: '3.12'}
+          - {python: '3.11'}
+          - {python: '3.10'}
+          - {name: Minimum Versions, python: '3.10', tox: tests-min}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+          allow-prereleases: true
+      - run: uv sync --group dev
+      - run: uv run tox run -e ${{ matrix.tox || format('py{0}', matrix.python) }}
